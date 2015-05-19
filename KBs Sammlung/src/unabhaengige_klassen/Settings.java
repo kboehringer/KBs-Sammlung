@@ -28,13 +28,18 @@ public class Settings {
 	 * @param filePath String System-path for the File
 	 */
 	public Settings(String filePath) {
-		_settings = new HashMap<String, String>();
-		_filePath = new File(filePath);
-		if (_filePath.exists()) {
-			load();
+		if (filePath == null) {
+			showMessage("The filePath is null");
 		}
 		else {
-			_settingsChanged = true;
+			_settings = new HashMap<String, String>();
+			_filePath = new File(filePath);
+			if (_filePath.exists()) {
+				load();
+			}
+			else {
+				_settingsChanged = true;
+			}
 		}
 	}
 	/**
@@ -52,7 +57,7 @@ public class Settings {
 			}
 			sc.close();
 		} catch (FileNotFoundException e) {
-			showMessage("Die Datei mit den Einstellungen wurde nicht gefunden: " + e.getClass() + "\n" + e.getStackTrace());
+			showMessage("The settings-data was not found: " + e.getClass() + "\n" + e.getStackTrace());
 		}
 	}
 	/**
@@ -71,7 +76,7 @@ public class Settings {
 				}
 				bw.close();
 			} catch (IOException e) {
-				showMessage("Die Einstellungen konnten nicht gespeichert werden: " + e.getClass() + "\n" + e.getStackTrace());
+				showMessage("The settings could not be saved: " + e.getClass() + "\n" + e.getStackTrace());
 			}
 		}
 	}
@@ -81,11 +86,16 @@ public class Settings {
 	 * @param value String Value
 	 */
 	public void add(String key, String value) {
-		_settings.put(key, value);
-		_settingsChanged = true;
+		if (key == null || value == null) {
+			showMessage("There is nothing to add, key and/or value == null");
+		}
+		else {
+			_settings.put(key, value);
+			_settingsChanged = true;
+		}
 	}
 	/**
-	 * Returns the Value of the given Key
+	 * Returns the Value of the given Key or null if key doesn't exists
 	 * @param key String Keyword of the Value
 	 * @return String Value
 	 */
@@ -98,7 +108,7 @@ public class Settings {
 	 */
 	private void showMessage(String message)
     {
-        JOptionPane.showMessageDialog(null, message, "Fehlermeldung",
+        JOptionPane.showMessageDialog(null, message, "Error",
                 JOptionPane.ERROR_MESSAGE);
     }
 }
